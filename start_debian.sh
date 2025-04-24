@@ -418,7 +418,7 @@ init() {
         echo "Этот скрипт должен быть запущен под пользователем root."
         exit 1
     fi
-    apt install sudo
+    apt install sudo dialog
 
 
 }

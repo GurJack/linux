@@ -52,6 +52,7 @@ add_user(){
     # Проверка existence пользователя
     if id -u "$username" >/dev/null 2>&1; then
         echo "Пользователь $username уже существует."
+        $result_info < "${GREEN}Пользователь $username уже существует.${NC}"
     else
         # Сolicitud password with length check
         while true; do
@@ -83,8 +84,10 @@ add_user(){
     # Проверка успешного завершения операций
     if [ $? -eq 0 ]; then
         echo "Пользователь $username успешно создан и добавлен в группу sudo."
+        $result_info < "${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
     else
         echo "Ошибка при создании пользователя или назначении пароля."
+        $result_info < "${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
     fi
 }
 
@@ -535,7 +538,7 @@ main() {
 # Функция для выбора пакетов для установки
 select_packages() {
     #clear
-    menu_choice=$(dialog --menu "=== Выбор пакетов ===" 15 40 4 \
+    menu_choice=$(dialog --menu "=== Выбор пакетов ===" 15 50 5 \
     1 "Автоматическая установка сервер" \
     2 "Автоматическая установка рабочая станция" \
     3 "Ручная установка" \
@@ -578,6 +581,8 @@ select_packages() {
 }
 
 install_type="";
+reult_info="";
 init;
 main;
+echo $result_info
 exit 0

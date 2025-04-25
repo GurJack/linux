@@ -52,7 +52,7 @@ add_user(){
     # Проверка existence пользователя
     if id -u "$username" >/dev/null 2>&1; then
         echo "Пользователь $username уже существует."
-          $result_info="$result_info /n ${GREEN}Пользователь $username уже существует.${NC}"
+          result_info="$result_info /n ${GREEN}Пользователь $username уже существует.${NC}"
     else
         # Сolicitud password with length check
         while true; do
@@ -84,10 +84,10 @@ add_user(){
     # Проверка успешного завершения операций
     if [ $? -eq 0 ]; then
         echo "Пользователь $username успешно создан и добавлен в группу sudo."
-        $result_info="$result_info /n ${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
+        result_info="$result_info /n ${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
     else
         echo "Ошибка при создании пользователя или назначении пароля."
-        $result_info="$result_info /n ${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
+        result_info="$result_info /n ${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
     fi
 }
 
@@ -586,8 +586,8 @@ select_packages() {
 }
 
 install_type="";
-reult_info="";
+result_info="";
 init;
 main;
-echo "Результат:\n$result_info"
+echo -e "Результат:/n$result_info"
 exit 0

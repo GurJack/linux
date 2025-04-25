@@ -420,7 +420,7 @@ init() {
     fi
     apt update
     apt -y install sudo dialog
-    #clear
+    clear
     # Определение дистрибутива Linux и его версии
     if [ -f /etc/os-release ]; then
         . /etc/os-release 2>/dev/null || true
@@ -432,13 +432,17 @@ init() {
     echo "Определённый дистрибутив: $ID"
     echo "Версия дистрибутива: $VERSION_ID"
 
-    # Проверка на Proxmox VE
-    if [ -f /etc/proxmox/ve-release ]; then
-        PROXMOX_VERSION=$(cat /etc/proxmox/ve-release)
-        echo "Установлена Proxmox VE версии: $PROXMOX_VERSION"
-    else
-        echo "Proxmox VE не установлена."
+    # Проверить версию через pveversion
+    VERSION=$(pveversion -v | grep 'version:' | awk '{print $2}')
+
+    if [ -z "$VERSION" ]; then
+        # Если не удалось получить информацию, попробовать прочитать из файла cluster.conf
+        if [ -f /etc/pve/cluster.conf ]; then
+            VERSION=$(cat /etc/pve/cluster.conf | grep 'version' | awk '{print $3}')
+        fi
     fi
+
+    echo "Установлена версия Proxmox: $VERSION"
 
     # Проверка на OPNsense (на основе FreeBSD)
     if [ -f /etc/opnsense/version ]; then

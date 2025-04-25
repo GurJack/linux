@@ -414,12 +414,13 @@ toggle_sshd() {
 
 # Функция инициализации
 init() {
-    clear
     if [ $UID != 0 ]; then
         echo "Этот скрипт должен быть запущен под пользователем root."
         exit 1
     fi
-    apt install sudo dialog
+    apt update
+    apt -y install sudo dialog
+    #clear
     # Определение дистрибутива Linux и его версии
     if [ -f /etc/os-release ]; then
         . /etc/os-release 2>/dev/null || true

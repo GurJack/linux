@@ -52,7 +52,7 @@ add_user(){
     # Проверка existence пользователя
     if id -u "$username" >/dev/null 2>&1; then
         echo "Пользователь $username уже существует."
-          result_info="$result_info /n ${GREEN}Пользователь $username уже существует.${NC}"
+          result_info="$result_info \n ${GREEN}Пользователь $username уже существует.${NC}"
     else
         # Сolicitud password with length check
         while true; do
@@ -84,10 +84,10 @@ add_user(){
     # Проверка успешного завершения операций
     if [ $? -eq 0 ]; then
         echo "Пользователь $username успешно создан и добавлен в группу sudo."
-        result_info="$result_info /n ${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
+        result_info="$result_info \n ${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
     else
         echo "Ошибка при создании пользователя или назначении пароля."
-        result_info="$result_info /n ${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
+        result_info="$result_info \n ${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
     fi
 }
 
@@ -95,6 +95,9 @@ sources_list_update(){
     local install_type=$1
 
 
+    echo "ID: $ID"
+    echo "VERSION_ID: $VERSION_ID"
+    echo "PROXMOX_VERSION: $PROXMOX_VERSION"
 
 # Проверка, является ли система Debian 12
 if [ "$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)" != "bookworm" ]; then
@@ -108,7 +111,7 @@ echo "Текущее содержимое /etc/apt/sources.list:"
 cat /etc/apt/sources.list
 
 # Замена содержимого файла
-sudo tee /etc/apt/sources.list > /dev/null << 'EOF'
+sudo tee /etc/apt/sources.list > /dev/null < 'EOF'
 deb http://ftp.ru.debian.org/debian/ bookworm main non-free-firmware
 deb-src http://ftp.ru.debian.org/debian/ bookworm main non-free-firmware
 deb http://security.debian.org/debian-security bookworm-security main non-free-firmware
@@ -543,7 +546,7 @@ main() {
 # Функция для выбора пакетов для установки
 select_packages() {
     #clear
-    menu_choice=$(dialog --menu "=== Выбор пакетов ===" 15 50 5 \
+    menu_choice=$(dialog --menu "$ID \n Версия: $VERSION_ID \n === Выбор пакетов ===" 15 50 5 \
     1 "Автоматическая установка сервер" \
     2 "Автоматическая установка рабочая станция" \
     3 "Ручная установка" \
@@ -589,5 +592,5 @@ install_type="";
 result_info="";
 init;
 main;
-echo -e "Результат:/n$result_info"
+echo -e "Результат: \n $result_info"
 exit 0

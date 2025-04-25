@@ -419,7 +419,38 @@ init() {
         exit 1
     fi
     apt install sudo dialog
+    # Определение дистрибутива Linux и его версии
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release 2>/dev/null || true
+    fi
 
+    ID="${ID}"
+    VERSION_ID="${VERSION_ID}"
+
+    echo "Определённый дистрибутив: $ID"
+    echo "Версия дистрибутива: $VERSION_ID"
+
+    # Проверка на Proxmox VE
+    if [ -f /etc/proxmox/ve-release ]; then
+        PROXMOX_VERSION=$(cat /etc/proxmox/ve-release)
+        echo "Установлена Proxmox VE версии: $PROXMOX_VERSION"
+    else
+        echo "Proxmox VE не установлена."
+    fi
+
+    # Проверка на OPNsense (на основе FreeBSD)
+    if [ -f /etc/opnsense/version ]; then
+        OPNSENSE_VERSION=$(cat /etc/opnsense/version)
+        echo "Установлен OPNsense версии: $OPNSENSE_VERSION"
+    elif [ $(uname -s) = "FreeBSD" ]; then
+        echo "OPNsense не установлены"
+    fi
+
+    # Переменные с результатами
+    echo "ID: $ID"
+    echo "VERSION_ID: $VERSION_ID"
+    echo "PROXMOX_VERSION: $PROXMOX_VERSION"
+    echo "OPNSENSE_VERSION: $OPNSENSE_VERSION"
 
 }
 

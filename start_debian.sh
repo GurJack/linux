@@ -443,8 +443,24 @@ init() {
     if [ -f /etc/opnsense/version ]; then
         OPNSENSE_VERSION=$(cat /etc/opnsense/version)
         echo "Установлен OPNsense версии: $OPNSENSE_VERSION"
-    elif [ $(uname -s) = "FreeBSD" ]; then
+    else
         echo "OPNsense не установлены"
+    fi
+
+    # Проверка на TrueNAS (на основе Debian)
+    if [ "$ID" == "debian" ] && dpkg --get-selections | grep -q truenas; then
+        TRUENAS_DEBIANInstalled="Да"
+        echo "Установлен TrueNAS на базе Debian."
+    elif [ $(uname -s) = "FreeBSD" ]; then
+        # Проверка TrueNAS на FreeBSD (оставьте как есть)
+        if [ -f /etc/truenas/version ]; then
+            TRUENAS_VERSION=$(cat /etc/truenas/version)
+            echo "Установлен TrueNAS версии: $TRUENAS_VERSION"
+        else
+            echo "TrueNAS не установлен."
+        fi
+    else
+        echo "TrueNAS не обнаружен на этом системе."
     fi
 
     # Переменные с результатами

@@ -52,7 +52,7 @@ add_user(){
     # Проверка existence пользователя
     if id -u "$username" >/dev/null 2>&1; then
         echo "Пользователь $username уже существует."
-          $result_info = "$result_info/n"+"${GREEN}Пользователь $username уже существует.${NC}" 
+          $result_info="$result_info /n ${GREEN}Пользователь $username уже существует.${NC}"
     else
         # Сolicitud password with length check
         while true; do
@@ -84,10 +84,10 @@ add_user(){
     # Проверка успешного завершения операций
     if [ $? -eq 0 ]; then
         echo "Пользователь $username успешно создан и добавлен в группу sudo."
-        $result_info = "$result_info/n"+"${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
+        $result_info="$result_info /n ${GREEN}Пользователь $username успешно создан и добавлен в группу sudo.${NC}"
     else
         echo "Ошибка при создании пользователя или назначении пароля."
-        $result_info = "$result_info/n"+"${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
+        $result_info="$result_info /n ${RED}Ошибка при создании пользователя $username или назначении пароля.${NC}"
     fi
 }
 
@@ -483,11 +483,16 @@ init() {
 main() {
     select_packages
     add_user $install_type
-    echo -e "${GREEN}Хотите изменить список пакетов? (Y/n):${NC}"
-    read answer
-    if [[ $answer == "Y" || $answer == "y" || $answer == "н" || $answer == "Н" || $answer == "" ]]; then
+    dialog --title "Хотите изменить список пакетов?" --yesno "Вы уверены?" 7 30
+
+    if [ $? = 0 ]; then
         sources_list_update $install_type
     fi
+    #echo -e "${GREEN}Хотите изменить список пакетов? (Y/n):${NC}"
+    #read answer
+    #if [[ $answer == "Y" || $answer == "y" || $answer == "н" || $answer == "Н" || $answer == "" ]]; then
+    #    sources_list_update $install_type
+    #fi
     # Обновление списка пакетов
     sudo apt update && apt upgrade -y && apt autoremove && echo "Список пакетов обновлен."
     local_mashine_settings $install_type

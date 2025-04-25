@@ -546,6 +546,11 @@ main() {
 # Функция для выбора пакетов для установки
 select_packages() {
     #clear
+
+
+    RESULT=$(dialog --title "Введите ваше имя:" --clear --inputbox "\nВведите:" 10 30 2>&1)
+    echo "$RESULT"
+
     menu_choice=$(dialog --menu "$ID \n Версия: $VERSION_ID \n === Выбор пакетов ===" 15 50 5 \
     1 "Автоматическая установка сервер" \
     2 "Автоматическая установка рабочая станция" \
@@ -554,11 +559,11 @@ select_packages() {
 
     case $menu_choice in
         1) install_type="server"
-            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+            ;;
         2) install_type="desctop"
-            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+            ;;
         3) install_type="hand"
-            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+            ;;
         *) exit;;
     esac
 

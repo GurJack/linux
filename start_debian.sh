@@ -584,5 +584,5 @@ install_type="";
 reult_info="";
 init;
 main;
-echo $result_info
+echo "Результат:\n$result_info"
 exit 0

@@ -535,30 +535,46 @@ main() {
 # Функция для выбора пакетов для установки
 select_packages() {
     #clear
-    echo -e "${BLUE}=== Выбор пакетов ===${NC}"
-    echo ""
-    echo "Доступные пакеты:"
-    echo "1. Автоматическая установка сервер"
-    echo "2. Автоматическая установка рабочая станция"
-    echo "3. Ручная установка"
-    echo ""
-    read -p "Введите номера пакета: " packages
-    for pkg in $packages; do
-        case $pkg in
-            1)
-                install_type="server"
-                ;;
-            2)
-                install_type="desctop"
-                ;;
-            3)
-                install_type="hand"
-                ;;
-            *)
-                echo -e "${RED}Неверный номер пакета.${NC}"
-                ;;
-        esac
-    done
+    menu_choice=$(dialog --menu "=== Выбор пакетов ===" 15 40 4 \
+    1 "Автоматическая установка сервер" \
+    2 "Автоматическая установка рабочая станция" \
+    3 "Ручная установка" \
+    4 "Выход" 2>&1 > /dev/tty)
+
+    case $menu_choice in
+        1) install_type="server"
+            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+        2) install_type="desctop"
+            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+        3) install_type="hand"
+            dialog --msgbox "Вы выбрали $install_type!" 10 30 ;;
+        *) exit;;
+    esac
+
+    #echo -e "${BLUE}=== Выбор пакетов ===${NC}"
+    #echo ""
+    #echo "Доступные пакеты:"
+    #echo "1. Автоматическая установка сервер"
+    #echo "2. Автоматическая установка рабочая станция"
+    #echo "3. Ручная установка"
+    #echo ""
+    #read -p "Введите номера пакета: " packages
+    #for pkg in $packages; do
+    #    case $pkg in
+    #        1)
+    #            install_type="server"
+    #            ;;
+    #        2)
+    #            install_type="desctop"
+    #            ;;
+    #        3)
+    #            install_type="hand"
+    #            ;;
+    #        *)
+    #            echo -e "${RED}Неверный номер пакета.${NC}"
+    #            ;;
+    #    esac
+    #done
 }
 
 install_type="";

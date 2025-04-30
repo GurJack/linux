@@ -487,7 +487,6 @@ main() {
     select_packages
     add_user $install_type
     dialog --title "Хотите изменить список пакетов?" --yesno "Вы уверены?" 7 30
-
     if [ $? = 0 ]; then
         sources_list_update $install_type
     fi
@@ -548,10 +547,7 @@ select_packages() {
     #clear
 
 
-    RESULT=$(dialog --title "Введите ваше имя:" --clear --inputbox "\nВведите:" 10 30 2>&1)
-    echo "$RESULT"
-
-    menu_choice=$(dialog --menu "$ID \n Версия: $VERSION_ID \n === Выбор пакетов ===" 15 50 5 \
+    menu_choice=$(dialog --menu "  $ID \n Версия: $VERSION_ID \n === Выбор пакетов ===" 15 50 5 \
     1 "Автоматическая установка сервер" \
     2 "Автоматическая установка рабочая станция" \
     3 "Ручная установка" \

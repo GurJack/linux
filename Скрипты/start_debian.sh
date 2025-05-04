@@ -338,7 +338,29 @@ ssh_root_disable(){
 # Установка доп пакетов
 install_packege(){
     local install_type=$1
+    dns_info=""
+
+    # Проверяем файлы в порядке приоритета и копируем их содержимое, если файл не пустой
+    for file in /etc/resolvconf/resolv.conf.d/base /etc/resolvconf/resolv.conf.d/original /etc/resolv.conf; do
+        if [ -s "$file" ] && [ -f "$file" ]; then
+            dns_info=$(<"$file")
+            break
+        fi
+    done
+
+    # Если не найдено подходящих файлов, используем значения по умолчанию
+    if [ -z "$dns_info" ]; then
+         default_search="search gurjack.ru"
+        default_nameserver="nameserver 192.168.27.10"
+        # Сохраняем значения в dns_info
+        dns_info="${default_search}\n${default_nameserver}"
+
+    fi
+
+
     sudo apt install -y flatpak snap mc ntfs-3g gdebi whois gpg net-tools dnsutils wget cifs-utils zip iptables resolvconf apache2-utils git tree ncdu bash-completion ipcalc network-manager ufw
+    echo "$dns_info" | tee /etc/resolv.conf /etc/resolvconf/resolv.conf.d/base > /dev/null
+    echo "Настройки DNS успешно обновлены."
 }
 
 # Установка fail2ban
